@@ -1,3 +1,28 @@
+# KNIME Hub Secret Store KES fork
+
+This is a fork of [KES](https://github.com/minio/kes) with an encrypted filesystem store implementation.
+
+This repository is maintained by [the Quokkas team](mailto:scrum-bd-esi@knime.com).
+
+## Getting Started
+
+To use KES with an encrypted filesystem store, create a master key file with exactly 32 bytes:
+
+```sh
+dd if=/dev/random of=/some-path/my-kes-master-key bs=32 count=1
+```
+
+Add the keystore to the configuration:
+
+```yaml
+ ...
+ keystore:
+   encryptedfs:
+     masterKeyPath: /some-path/my-kes-master-key
+     masterKeyCipher: AES256
+     path: /some-path/keystore
+```
+
 <p align="center">
   <img src='.github/logo.svg?sanitize=true' width='55%'>
 </p>
