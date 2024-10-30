@@ -87,11 +87,11 @@ RUN adduser \
 # To allow tracking base-images independently from applications (in DTrack),
 # we create (on-the-fly) a "base image" (i.e. scratch plus everything BUT the
 # application itself).
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.3 AS base
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.4 AS base
 
 RUN microdnf update -y --nodocs && microdnf install ca-certificates --nodocs
 
-FROM registry.access.redhat.com/ubi9/ubi-micro:9.3
+FROM registry.access.redhat.com/ubi9/ubi-micro:9.4
 
 ARG TAG
 
