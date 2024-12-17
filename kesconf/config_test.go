@@ -320,7 +320,7 @@ func TestReadServerConfigYAML_AWS_NoEndpoint(t *testing.T) {
 	// when no endpoint is specified in the config.
 
 	const (
-		Filename = "./testdata/aws-no-credentials.yml"
+		Filename = "./testdata/aws-no-endpoint.yml"
 
 		Endpoint     = ""
 		Region       = "us-east-2"
