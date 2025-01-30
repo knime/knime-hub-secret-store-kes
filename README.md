@@ -1,8 +1,14 @@
 # KNIME Hub Secret Store KES fork
 
-This is a fork of [KES](https://github.com/minio/kes) with an encrypted filesystem store implementation.
-
 This repository is maintained by [the Quokkas team](mailto:scrum-bd-esi@knime.com).
+
+This is a fork of [KES](https://github.com/minio/kes) with an encrypted filesystem store implementation:
+
+* https://github.com/minio/kes/pull/489
+* https://github.com/minio/kes/pull/496
+* https://github.com/minio/kes/pull/507
+* https://github.com/minio/kes/pull/508
+
 
 ## Getting Started
 
