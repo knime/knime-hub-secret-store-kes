@@ -4,7 +4,7 @@
 # Use the latest (debian based) golang base image for test and build
 # Note, usually we would want images by digest. However, since we only use it
 # for build and test, we omit the digest go with the latest.
-FROM golang:1.23.1 AS sources
+FROM golang:1.23@sha256:8c10f21bec412f08f73aa7b97ca5ac5f28a39d8a88030ad8a339fd0a781d72b4 AS sources
 
 # Copy deps (vendor).
 # see: https://blog.boot.dev/golang/should-you-commit-the-vendor-folder-in-go/
@@ -87,11 +87,26 @@ RUN adduser \
 # To allow tracking base-images independently from applications (in DTrack),
 # we create (on-the-fly) a "base image" (i.e. scratch plus everything BUT the
 # application itself).
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5 AS base
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5 AS ubi-minimal
 
 RUN microdnf update -y --nodocs && microdnf install ca-certificates --nodocs
 
-FROM registry.access.redhat.com/ubi9/ubi-micro:9.5
+FROM registry.access.redhat.com/ubi9/ubi-micro:9.5 AS base
+
+# On RHEL the certificate bundle is located at:
+# - /etc/pki/tls/certs/ca-bundle.crt (RHEL 6)
+# - /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem (RHEL 7)
+COPY --from=ubi-minimal /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/ca-trust/extracted/pem/
+
+# Copy the user- and group files from the builder stage.
+COPY --from=build /etc/passwd /etc/passwd
+COPY --from=build /etc/group /etc/group
+
+###########
+# final image
+###########
+# Use the above created base-image (ubi-micro) the for the final image.
+FROM base
 
 ARG TAG
 
@@ -101,15 +116,6 @@ ARG TAG
 #      version="${TAG}" \
 #      release="${TAG}" \
 #      summary="KES is a cloud-native distributed key management and encryption server designed to build zero-trust infrastructures at scale."
-
-# On RHEL the certificate bundle is located at:
-# - /etc/pki/tls/certs/ca-bundle.crt (RHEL 6)
-# - /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem (RHEL 7)
-COPY --from=base /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/ca-trust/extracted/pem/
-
-# Copy the user- and group files from the builder stage.
-COPY --from=build /etc/passwd /etc/passwd
-COPY --from=build /etc/group /etc/group
 
 COPY LICENSE /LICENSE
 COPY CREDITS /CREDITS
