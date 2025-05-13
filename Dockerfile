@@ -1,10 +1,9 @@
 ###########
 # sources
 ###########
-# Use the latest (debian based) golang base image for test and build
-# Note, usually we would want images by digest. However, since we only use it
-# for build and test, we omit the digest go with the latest.
-FROM golang:1.23@sha256:8c10f21bec412f08f73aa7b97ca5ac5f28a39d8a88030ad8a339fd0a781d72b4 AS sources
+# golang 1.24.3 for multi-platform
+# https://hub.docker.com/layers/library/golang/1.24.3/images/sha256-631c39509701926f8250cc55a81ef158c702c0e735a9c6e49928e896930f4309
+FROM golang:1.24.3@sha256:39d9e7d9c5d9c9e4baf0d8fff579f06d5032c0f4425cdec9e86732e8e4e374dc AS sources
 
 # Copy deps (vendor).
 # see: https://blog.boot.dev/golang/should-you-commit-the-vendor-folder-in-go/
@@ -31,7 +30,7 @@ FROM sources AS test
 COPY .golangci.yml ./
 
 # Install golangci-lint.
-RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.64.8/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.8
 
 # Lint.
 RUN golangci-lint run  ./... --out-format checkstyle:/tmp/lint.out,colored-line-number
@@ -43,7 +42,7 @@ RUN go install github.com/jstemmer/go-junit-report/v2@latest
 RUN go test ./... -p=1 -coverpkg=./... -coverprofile /tmp/cover.out -v | ${GOPATH}/bin/go-junit-report > /tmp/report.xml
 
 # Install and run the SBOM creator.
-RUN go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@latest
+RUN go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.9.0
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 ${GOPATH}/bin/cyclonedx-gomod app -json -output /tmp/bom.json -licenses --assert-licenses=true -main ./cmd/kes .
 
 
