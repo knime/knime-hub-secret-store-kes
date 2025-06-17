@@ -27,3 +27,6 @@ issues:
       - "var-naming: don't use ALL_CAPS in Go names; use CamelCase"
       - "package-comments: should have a package comment"
       - "exitAfterDefer:"
+
+run:
+  timeout: 5m
