@@ -1,9 +1,9 @@
 ###########
 # sources
 ###########
-# golang 1.24.6 for multi-platform
-# https://hub.docker.com/layers/library/golang/1.24.6/images/sha256-d6d07e5326853f71a30decb4d777467428e85c087433b3d76c8b74933abd48b1
-FROM golang:1.24.6@sha256:8d9e57c5a6f2bede16fe674c16149eee20db6907129e02c4ad91ce5a697a4012 AS sources
+# golang 1.25.4 for multi-platform
+# https://hub.docker.com/layers/library/golang/1.25.4/images/sha256-406139dc5f8e5d79c709b8e637a0c1fc5907ed1521964b3ae419d4ecb002560e
+FROM golang:1.25.4@sha256:f60eaa87c79e604967c84d18fd3b151b3ee3f033bcdade4f3494e38411e60963 AS sources
 
 # Copy deps (vendor).
 # see: https://blog.boot.dev/golang/should-you-commit-the-vendor-folder-in-go/
