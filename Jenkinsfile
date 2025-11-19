@@ -25,7 +25,7 @@ timeout(time: 15, unit: 'MINUTES') {
             currentBuild.result = 'FAILURE'
             throw ex
         } finally {
-            notifications.notifyBuild(buildStatus: currentBuild.result);
+            // no frequent changes expected, no build notifications required
         }
     }
 }
