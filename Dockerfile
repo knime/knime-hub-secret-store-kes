@@ -86,11 +86,11 @@ RUN adduser \
 # To allow tracking base-images independently from applications (in DTrack),
 # we create (on-the-fly) a "base image" (i.e. scratch plus everything BUT the
 # application itself).
-FROM registry.access.redhat.com/ubi10/ubi-minimal:10.0 AS ubi-minimal
+FROM registry.access.redhat.com/ubi10/ubi-minimal:10.1 AS ubi-minimal
 
 RUN microdnf update -y --nodocs && microdnf install ca-certificates --nodocs
 
-FROM registry.access.redhat.com/ubi10/ubi-micro:10.0 AS base
+FROM registry.access.redhat.com/ubi10/ubi-micro:10.1 AS base
 
 # On RHEL the certificate bundle is located at:
 # - /etc/pki/tls/certs/ca-bundle.crt (RHEL 6)
