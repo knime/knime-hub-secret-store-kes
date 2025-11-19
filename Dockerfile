@@ -30,10 +30,10 @@ FROM sources AS test
 COPY .golangci.yml ./
 
 # Install golangci-lint.
-RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.64.8/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.8
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v2.4.0/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.4.0
 
 # Lint.
-RUN golangci-lint run  ./... --out-format checkstyle:/tmp/lint.out,colored-line-number
+RUN golangci-lint run  ./...
 
 # Install the got test to junit converter.
 RUN go install github.com/jstemmer/go-junit-report/v2@latest
